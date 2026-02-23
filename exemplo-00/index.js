@@ -29,14 +29,22 @@ async function trainModel(inputXs, outputYs) {
         callbacks: {
             onEpochEnd: (epoch, logs) => {
                 console.log(`Época ${epoch + 1}: perda = ${logs.loss.toFixed(4)}, precisão = ${logs.acc.toFixed(4)}`);
-            }
+            } // comentei pra evitar log chato durante o treinamento, mas pode ser útil para acompanhar o progresso do modelo
         }
     });
 
     return model;
 }
 
+async function predict(model, inputTensor) {
 
+    const tfInput = tf.tensor2d(inputTensor);
+    const prediction = model.predict(tfInput);
+
+    const predArray = await prediction.array();
+
+    return predArray[0].map((prob,index) =>({prob,index}));
+}
 
 // Exemplo de pessoas para treino (cada pessoa com idade, cor e localização)
 // const pessoas = [
@@ -77,4 +85,31 @@ const outputYs = tf.tensor2d(tensorLabels)
 inputXs.print();
 outputYs.print();
 
-const model = trainModel(inputXs, outputYs);
+const model = await trainModel(inputXs, outputYs);
+
+const pessoasTeste = { nome: "Zé", idade: 28, cor: "verde", localizacao: "Curitiba" };
+// normalizando os dados de teste
+const pessoaTensorNormalizado = [
+    [
+        0.2, // idade normalizada
+        1,    // cor azul
+        0,    // cor vermelho
+        0,    // cor verde
+        1,    // localização São Paulo
+        0,    // localização Rio
+        0     // localização Curitiba
+    ]
+];
+
+const predictions = await predict(model, pessoaTensorNormalizado);
+
+const resultados = predictions.sort((a, b) => b.prob - a.prob).map(pred => ({
+    categoria: labelsNomes[pred.index],
+    probabilidade: pred.prob
+}));
+
+console.log("Previsões para Zé:");
+resultados.forEach(result => {
+    console.log(`${result.categoria}: ${(result.probabilidade * 100).toFixed(2)}%`);
+});
+

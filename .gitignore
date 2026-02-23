@@ -1,0 +1,69 @@
+# Dependências
+node_modules/
+jspm_packages/
+bower_components/
+web_modules/
+
+# Builds / produção
+dist/
+build/
+out/
+.release/
+
+# Cobertura de testes
+coverage/
+*.lcov
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Arquivos de ambiente (NUNCA commitar senhas)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache / ferramentas
+.cache/
+.parcel-cache/
+.eslintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.stylelintcache
+.typings/
+.npm/
+.yarn-integrity
+
+# TypeScript
+*.tsbuildinfo
+
+# Sistema / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Node REPL
+.node_repl_history
+
+# Arquivos gerados por npm pack
+*.tgz
+
+# Addons binários
+build/Release/
+
+# Outros
+*.pid
+*.seed
+*.pid.lock
